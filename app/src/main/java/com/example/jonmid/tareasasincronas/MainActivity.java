@@ -12,15 +12,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jonmid.tareasasincronas.Models.Post;
+import com.example.jonmid.tareasasincronas.Parser.Json;
 import com.example.jonmid.tareasasincronas.URL.HttpManger;
+import com.sun.corba.se.impl.oa.toa.TOA;
+
+import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     Button button;
     TextView textView;
+
+    List<Post> postList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
     // *************************************************************************************
 
-    public void processData(String s){
+    public void processData(){
         //textView.setText("Numero: "+s);
         //textView.setTextSize(Integer.parseInt(s));
-        textView.append(s + "\n");
+        //textView.append(s + "\n");
+        Toast.makeText(this, String.valueOf(postList.size()), Toast.LENGTH_SHORT).show();
+        for (Post str : postList){
+            textView.append(str.toString() + "\n");
+        }
     }
 
     public class MyTask extends AsyncTask<String, String, String>{
@@ -98,13 +111,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            processData(values[0]);
+            processData();
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            processData(s);
+
+            try {
+                postList = Json.getDataJson(s);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            processData();
             progressBar.setVisibility(View.GONE);
         }
     }
