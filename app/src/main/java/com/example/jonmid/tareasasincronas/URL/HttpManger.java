@@ -12,6 +12,7 @@ import java.net.URL;
  */
 
 public class HttpManger {
+    // Clase para llamar Datos
     public static String getData(String url) throws IOException {
         //Clase para manejar archivos
         BufferedReader bufferedReader;

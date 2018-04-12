@@ -12,6 +12,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jonmid.tareasasincronas.URL.HttpManger;
+
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
@@ -58,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
     // *************************************************************************************
 
     public void processData(String s){
-        textView.setText("Numero: "+s);
-        textView.setTextSize(Integer.parseInt(s));
+        //textView.setText("Numero: "+s);
+        //textView.setTextSize(Integer.parseInt(s));
+        textView.append(s + "\n");
     }
 
     public class MyTask extends AsyncTask<String, String, String>{
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            for (int i = 1; i <= 50; i++){
+            /*for (int i = 1; i <= 50; i++){
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -79,7 +84,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 publishProgress(String.valueOf(i));
             }
-            return "fin";
+            return "fin";*/
+            String content = null;
+
+            try {
+                content = HttpManger.getData(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return content;
         }
 
         @Override
@@ -91,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            processData(s);
             progressBar.setVisibility(View.GONE);
         }
     }
