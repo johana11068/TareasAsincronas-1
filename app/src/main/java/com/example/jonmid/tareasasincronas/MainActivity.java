@@ -12,8 +12,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jonmid.tareasasincronas.Models.Country;
 import com.example.jonmid.tareasasincronas.Models.Post;
 import com.example.jonmid.tareasasincronas.Parser.Json;
+import com.example.jonmid.tareasasincronas.Parser.JsonCountry;
 import com.example.jonmid.tareasasincronas.URL.HttpManger;
 import com.sun.corba.se.impl.oa.toa.TOA;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
 
     List<Post> postList = new ArrayList<>();
+    List<Country> countryList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
     public void loadData(View view){
         if (isOnLine()){
             // Hacer llamado a la tarea
-            MyTask task = new MyTask();
-            task.execute("https://jsonplaceholder.typicode.com/posts");
+            //MyTask task = new MyTask();
+            //task.execute("https://jsonplaceholder.typicode.com/posts");
+
+            TaskCountry taskCountry = new TaskCountry();
+            taskCountry.execute("http://services.groupkt.com/country/get/all");
+
         }else {
             Toast.makeText(this, "Sin conexion", Toast.LENGTH_SHORT).show();
         }
@@ -74,9 +81,12 @@ public class MainActivity extends AppCompatActivity {
         //textView.setText("Numero: "+s);
         //textView.setTextSize(Integer.parseInt(s));
         //textView.append(s + "\n");
-        Toast.makeText(this, String.valueOf(postList.size()), Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, String.valueOf(postList.size()), Toast.LENGTH_SHORT).show();
         for (Post str : postList){
             textView.append(str.toString() + "\n");
+        }*/
+        for (Country str : countryList){
+            textView.append(str.getName() + "\n");
         }
     }
 
@@ -126,6 +136,44 @@ public class MainActivity extends AppCompatActivity {
 
             processData();
             progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    // *************************************************************************************
+
+    public class TaskCountry extends AsyncTask<String,String,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(textView.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String content = null;
+            try {
+                content = HttpManger.getData(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return content;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                countryList = JsonCountry.getData(s);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            processData();
+            progressBar.setVisibility(textView.GONE);
         }
     }
 }
