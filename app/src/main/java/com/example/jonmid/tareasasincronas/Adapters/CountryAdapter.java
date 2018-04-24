@@ -47,6 +47,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.Viewhold
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
+        //Asignar los valores a la vista
         holder.textViewCountry.setText(countryList.get(position).getName());
         holder.textViewAlpha2.setText(countryList.get(position).getAlpha2_code());
         holder.textViewAlpha3.setText(countryList.get(position).getAlpha3_code());
