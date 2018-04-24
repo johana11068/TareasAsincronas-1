@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -17,7 +18,7 @@ import com.example.jonmid.tareasasincronas.Models.Post;
 import com.example.jonmid.tareasasincronas.Parser.Json;
 import com.example.jonmid.tareasasincronas.Parser.JsonCountry;
 import com.example.jonmid.tareasasincronas.URL.HttpManger;
-import com.sun.corba.se.impl.oa.toa.TOA;
+//import com.sun.corba.se.impl.oa.toa.TOA;
 
 import org.json.JSONException;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Post> postList = new ArrayList<>();
     List<Country> countryList = new ArrayList<>();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.id_pb_data);
         button = (Button) findViewById(R.id.id_btn_loaddata);
-        textView = (TextView) findViewById(R.id.id_tv_data);
+        //textView = (TextView) findViewById(R.id.id_tv_data);
+        recyclerView = (RecyclerView) findViewById(R.id.id_rcv_data);
     }
 
     // Metodo para validar la conexion a internet
